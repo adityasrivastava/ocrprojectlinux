@@ -8,7 +8,7 @@ public interface PassportDetailsService {
 	String PASSPORT_NUMBER_REGEX = "^[A-Z0-9]+";
 	String NATIONALITY_REGEX = "[A-Z\\s]{3}";
 	String CHECK_DIGIT_REGEX = "[0-9]{1}";
-	String SEPERATOR_REGEX = "[<]+";
+	String SEPERATOR_REGEX = "^<+";
 	String DATE_OF_BIRTH_REGEX = "[0-9]{6}";
 	String DATE_OF_EXPIRY_REGEX = "[0-9]{6}";
 	String GENDER_REGEX = "[MF]{1}";
@@ -23,7 +23,7 @@ public interface PassportDetailsService {
 	String extractDateOfBirth(String param_objInputString);
 	String extractExpiryDate(String param_objInputString);
 	String extractCheckDigit(String param_objInputString);
-	String extractorSeperator(String param_objInputString);
+	String extractSeperator(String param_objInputString);
 	void setCurrentPositionIndex(int indexInitialization);
 
 }

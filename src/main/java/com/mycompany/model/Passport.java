@@ -81,6 +81,7 @@ public class Passport {
 //	public void setPersonalNumber(String personalNumber) {
 //		this.personalNumber = personalNumber;
 //	}
+	
 	@Override
 	public String toString() {
 		return "Passport [id=" + id + ", typeOfPassport=" + typeOfPassport + ", organization=" + organization
