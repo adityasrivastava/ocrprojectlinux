@@ -16,8 +16,8 @@ import com.mycompany.service.PassportDetailsServiceImpl;
 public class App 
 {
 	private static PassportDetailsService g_objPassportDetailsService;
-	private static Passport g_objPassport;
-	
+	private static Passport g_objPassport;  
+	 
     public static void main( String[] args )
     {
     	
@@ -44,8 +44,9 @@ public class App
             String passportNumber = g_objPassportDetailsService.extractPassportNumber(secondRow);  
             String passportNationality = g_objPassportDetailsService.extractNationality(secondRow);
             String passportDOB = g_objPassportDetailsService.extractDateOfBirth(secondRow);
-            String passportExpiry = g_objPassportDetailsService.extractExpiryDate(secondRow);
             char passportGender = g_objPassportDetailsService.extractGender(secondRow);
+            String passportExpiry = g_objPassportDetailsService.extractExpiryDate(secondRow);
+            
             
             g_objPassport.setTypeOfPassport(passportType);
             g_objPassport.setOrganization(passportOrganization);
@@ -56,7 +57,7 @@ public class App
             g_objPassport.setDateOfBirth(passportDOB);
             g_objPassport.setExpirationDate(passportExpiry);
             g_objPassport.setGender(passportGender);
-            
+             
             System.out.println(g_objPassport.toString());
 
         }
