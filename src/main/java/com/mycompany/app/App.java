@@ -1,17 +1,9 @@
 package com.mycompany.app;
 
-import java.io.UnsupportedEncodingException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.lept;
-import org.bytedeco.javacpp.lept.PIX;
-import org.bytedeco.javacpp.tesseract.TessBaseAPI;
-
 import com.mycompany.model.Passport;
 import com.mycompany.service.PassportDetailsService;
 import com.mycompany.service.PassportDetailsServiceImpl;
+import com.mycompany.util.TesseractImageToTextProcessor;
 
 public class App 
 {
@@ -24,7 +16,8 @@ public class App
     	App app = new App();
     	g_objPassport = new Passport();
     	g_objPassportDetailsService = new PassportDetailsServiceImpl();
-        String output = app.process("/home/adi/JavaWorkspace/tesseractProject/ocrprojectlinux/images/output1.tiff");
+        
+        String output = TesseractImageToTextProcessor.process("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
         
         if (output != null) {
         	output = output.trim();
@@ -62,37 +55,5 @@ public class App
 
         }
 
-    }
-
-    public String process(String file) {
-        TessBaseAPI api = new TessBaseAPI();
-
-        if (api.Init("/home/adi/JavaWorkspace/tesseractProject/ocrprojectlinux/tessdata", "eng") != 0) {
-            throw new RuntimeException("Could not initialize tesseract.");
-        }       
-        api.ReadConfigFile("/home/adi/JavaWorkspace/tesseractProject/ocrprojectlinux/tessdata/config/letter.config");
-        PIX image = null;
-        BytePointer outText = null;
-        try {
-            image = lept.pixRead(file);
-          
-            api.SetImage(image);
-            outText = api.GetUTF8Text();
-            String string = outText.getString("UTF-8");
-           
-            return string;
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("charset", e);
-        } finally {
-            if (outText != null) {
-                outText.deallocate();
-            }
-            if (image != null) {
-                lept.pixDestroy(image);
-            }
-            if (api != null) {
-                api.End();
-            }
-        }
     }
 }
