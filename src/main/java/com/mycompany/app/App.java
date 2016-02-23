@@ -20,21 +20,23 @@ public class App
     {
     	
     	App app = new App();
+    	
+    	
+    	
+    	
+    	String output = null;
     	g_objPassport = new Passport();
     	g_objPassportDetailsService = new PassportDetailsServiceImpl();
     	g_objImageToTextProcessor = new TesseractImageToTextProcessor();
     	
 //        String output = g_objImageToTextProcessor.processImageFromFile("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
-    	String output = null;
+    	
 		try {
-			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/output1.tiff");
-		
+			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/file3.tiff");
 			output = g_objImageToTextProcessor.processImageFromMemory(io,"/Users/adityasrivastava/Documents/TesseractProject/my-app", "eng");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -43,11 +45,11 @@ public class App
         	output = output.trim();
             String lines[] = output.split("\\r?\\n");
       
-            String firstRow = lines[lines.length-2];
-            String secondRow = lines[lines.length-1];
+            String firstRow = lines[lines.length-2].replace(" ", "");
+            String secondRow = lines[lines.length-1].replace(" ", "");
             
-            System.out.println(firstRow);
-            System.out.println(secondRow);
+            System.out.println(firstRow + " "+ firstRow.length());
+            System.out.println(secondRow + " "+ secondRow.length());
             
             char passportType = g_objPassportDetailsService.extractPassportType(firstRow);
             String passportOrganization = g_objPassportDetailsService.extractOrganization(firstRow);

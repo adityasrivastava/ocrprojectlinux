@@ -19,16 +19,16 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	@Override
 	public char extractPassportType(String param_objInputString) {
 		char v_objPassportType = 0;
-		this.extractSeperator(param_objInputString);
+//		this.extractSeperator(param_objInputString);
 		Matcher match = Pattern.compile(PASSPORT_TYPE_REGEX)
 				.matcher(param_objInputString);
-		match.region(1, param_objInputString.length());
+		match.region(g_iCurrentPositionIndex, param_objInputString.length());
 
 		if (match.find()) {
 			v_objPassportType = match.group(0).charAt(0);
 			g_iCurrentPositionIndex = match.end();
 		}
-
+		
 		return v_objPassportType;
 
 	}
@@ -60,6 +60,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 
 		if (match.find()) {
 			v_objGivenName = match.group(0);
+			v_objGivenName.replaceAll(" ", "");
 			g_iCurrentPositionIndex = match.end();
 		}
 
@@ -107,12 +108,14 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 
 		String v_objNationality = null;
 		this.extractSeperator(param_objInputString);
+		this.extractCheckDigit(param_objInputString);
 		Matcher match = Pattern.compile(NATIONALITY_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
 
 		if (match.find()) {
 			v_objNationality = match.group(0);
+			v_objNationality = v_objNationality.replace("1", "I");
 			g_iCurrentPositionIndex = match.end();
 		}
 
@@ -143,12 +146,14 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 
 		String v_objExpiryDate = null;
 		this.extractSeperator(param_objInputString);
+//		this.extractCheckDigit(param_objInputString);
 		Matcher match = Pattern.compile(DATE_OF_EXPIRY_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
 
 		if (match.find()) {
 			v_objExpiryDate = match.group(0);
+			v_objExpiryDate = v_objExpiryDate.replace("D", "0").replace("O", "0");
 			g_iCurrentPositionIndex = match.end();
 		}
 
@@ -175,7 +180,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	}
 
 	@Override
-	public String extractCheckDigit(String param_objInputString) {
+	public void extractCheckDigit(String param_objInputString) {
 
 		String v_objCheckDigit = null;
 
@@ -188,12 +193,10 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 			g_iCurrentPositionIndex = match.end();
 		}
 
-		return v_objCheckDigit;
-
 	}
 
 	@Override
-	public String extractSeperator(String param_objInputString) {
+	public void extractSeperator(String param_objInputString) {
 
 		String v_objSerpator = null;
 
@@ -206,7 +209,6 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 			g_iCurrentPositionIndex = match.end();
 		}
 
-		return v_objSerpator;
 
 	}
 
