@@ -1,5 +1,10 @@
 package com.mycompany.app;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import com.mycompany.model.Passport;
 import com.mycompany.service.PassportDetailsService;
 import com.mycompany.service.PassportDetailsServiceImpl;
@@ -7,6 +12,7 @@ import com.mycompany.util.TesseractImageToTextProcessor;
 
 public class App 
 {
+	private static TesseractImageToTextProcessor g_objImageToTextProcessor;
 	private static PassportDetailsService g_objPassportDetailsService;
 	private static Passport g_objPassport;  
 	 
@@ -16,15 +22,29 @@ public class App
     	App app = new App();
     	g_objPassport = new Passport();
     	g_objPassportDetailsService = new PassportDetailsServiceImpl();
-        
-        String output = TesseractImageToTextProcessor.process("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
-        
+    	g_objImageToTextProcessor = new TesseractImageToTextProcessor();
+    	
+//        String output = g_objImageToTextProcessor.processImageFromFile("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
+    	String output = null;
+		try {
+			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/output1.tiff");
+		
+			output = g_objImageToTextProcessor.processImageFromMemory(io,"/Users/adityasrivastava/Documents/TesseractProject/my-app", "eng");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
         if (output != null) {
         	output = output.trim();
             String lines[] = output.split("\\r?\\n");
       
-            String firstRow = lines[lines.length-2].replace(" ", "");
-            String secondRow = lines[lines.length-1].replace(" ", "");
+            String firstRow = lines[lines.length-2];
+            String secondRow = lines[lines.length-1];
             
             System.out.println(firstRow);
             System.out.println(secondRow);
