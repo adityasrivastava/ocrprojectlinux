@@ -1,10 +1,14 @@
 package com.mycompany.app;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
@@ -24,29 +28,61 @@ public class App
     public static void main( String[] args )
     {
     	
-    	App app = new App();
+    	App app = new App(); 
     	
-    	ConvertCmd cmd = new ConvertCmd();
-    	cmd.setSearchPath("/opt/ImageMagick/bin");
-    	IMOperation imo = new IMOperation();
-    	imo.addImage();
-//    	imo.resize(640,480);
-//    	imo.type("Grayscale");
-    	imo.addImage();
+    	BufferedImage im = null;
+		try {
+			im = ImageIO.read(new File("images/file1.tiff"));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
     	
+    	
+    	BufferedImage b2 = new BufferedImage(640, 480, BufferedImage.TYPE_BYTE_INDEXED);
+    	Graphics2D gd = b2.createGraphics();
+    	gd.drawImage(im, 0, 0, 640, 480, null);
+    	gd.dispose();
     	try {
     		
-    		cmd.run(imo, "images/image1color.tiff", "images/image1colorOut.tiff");
-		} catch (IOException e1) {
+//    		File f = new File("images/image1colorOut.tiff");
+//    		if(!f.exists()){
+//    			f.createNewFile();
+//    		}
+//    		
+    		
+			ImageIO.write(b2, "tiff",new File("images/image1colorOut.tiff"));
+		} catch (IOException e2) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IM4JavaException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e2.printStackTrace();
+		
 		}
+    	
+    	
+    	
+    	
+//    	ConvertCmd cmd = new ConvertCmd();
+//    	//cmd.setSearchPath("/opt/ImageMagick/bin");
+//    	IMOperation imo = new IMOperation();
+//    	imo.addImage(); 
+//    	imo.resize(640,480);
+////    	imo.type("Grayscale");
+////    	imo.blackThreshold(99.0);
+//    	imo.addImage();
+//    	
+//    	try {
+//    		
+//    		cmd.run(imo, "images/file1.tiff", "images/image1colorOut.tiff");
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (IM4JavaException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
     	
     	
     	String output = null;
@@ -57,8 +93,8 @@ public class App
 //        String output = g_objImageToTextProcessor.processImageFromFile("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
     	
 		try {
-			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/image1colorOut.tiff");
-			output = g_objImageToTextProcessor.processImageFromMemory(io,"/Users/adityasrivastava/Documents/TesseractProject/my-app", "eng");
+			InputStream io = new FileInputStream("images/image1colorOut.tiff");
+			output = g_objImageToTextProcessor.processImageFromMemory(io,".", "eng");
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
