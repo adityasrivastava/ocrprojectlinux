@@ -3,7 +3,12 @@ package com.mycompany.app;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IM4JavaException;
+import org.im4java.core.IMOperation;
 
 import com.mycompany.model.Passport;
 import com.mycompany.service.PassportDetailsService;
@@ -21,7 +26,27 @@ public class App
     	
     	App app = new App();
     	
+    	ConvertCmd cmd = new ConvertCmd();
+    	cmd.setSearchPath("/opt/ImageMagick/bin");
+    	IMOperation imo = new IMOperation();
+    	imo.addImage();
+//    	imo.resize(640,480);
+//    	imo.type("Grayscale");
+    	imo.addImage();
     	
+    	try {
+    		
+    		cmd.run(imo, "images/image1color.tiff", "images/image1colorOut.tiff");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IM4JavaException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	
     	
     	String output = null;
@@ -32,8 +57,9 @@ public class App
 //        String output = g_objImageToTextProcessor.processImageFromFile("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
     	
 		try {
-			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/file3.tiff");
+			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/image1colorOut.tiff");
 			output = g_objImageToTextProcessor.processImageFromMemory(io,"/Users/adityasrivastava/Documents/TesseractProject/my-app", "eng");
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -55,6 +81,7 @@ public class App
             String passportOrganization = g_objPassportDetailsService.extractOrganization(firstRow);
             String passportSurname = g_objPassportDetailsService.extractSurname(firstRow);
             String passportGivenName = g_objPassportDetailsService.extractGivenName(firstRow);
+            // Set reset position
             g_objPassportDetailsService.setCurrentPositionIndex(0);
             String passportNumber = g_objPassportDetailsService.extractPassportNumber(secondRow);  
             String passportNationality = g_objPassportDetailsService.extractNationality(secondRow);
