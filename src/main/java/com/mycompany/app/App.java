@@ -17,91 +17,42 @@ import org.im4java.core.IMOperation;
 import com.mycompany.model.Passport;
 import com.mycompany.service.PassportDetailsService;
 import com.mycompany.service.PassportDetailsServiceImpl;
+import com.mycompany.util.ImageProcessingUtil;
 import com.mycompany.util.TesseractImageToTextProcessor;
 
 public class App 
 {
 	private static TesseractImageToTextProcessor g_objImageToTextProcessor;
 	private static PassportDetailsService g_objPassportDetailsService;
-	private static Passport g_objPassport;  
-	 
-    public static void main( String[] args )
+	private static Passport g_objPassport;   
+	
+	  
+    public static void main( String[] args ) throws Exception
     {
-    	
+    	String outfile = "image1colorOut.tiff";
     	App app = new App(); 
     	
-    	BufferedImage im = null;
-		try {
-			im = ImageIO.read(new File("images/file1.tiff"));
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
     	
-    	
-    	BufferedImage b2 = new BufferedImage(640, 480, BufferedImage.TYPE_BYTE_INDEXED);
-    	Graphics2D gd = b2.createGraphics();
-    	gd.drawImage(im, 0, 0, 640, 480, null);
-    	gd.dispose();
-    	try {
-    		
-//    		File f = new File("images/image1colorOut.tiff");
-//    		if(!f.exists()){
-//    			f.createNewFile();
-//    		}
-//    		
-    		
-			ImageIO.write(b2, "tiff",new File("images/image1colorOut.tiff"));
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		
-		}
-    	
-    	
-    	
-    	
-//    	ConvertCmd cmd = new ConvertCmd();
-//    	//cmd.setSearchPath("/opt/ImageMagick/bin");
-//    	IMOperation imo = new IMOperation();
-//    	imo.addImage(); 
-//    	imo.resize(640,480);
-////    	imo.type("Grayscale");
-////    	imo.blackThreshold(99.0);
-//    	imo.addImage();
-//    	
-//    	try {
-//    		
-//    		cmd.run(imo, "images/file1.tiff", "images/image1colorOut.tiff");
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (InterruptedException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (IM4JavaException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-    	
-    	
+		ImageProcessingUtil.processImageForDetailExtraction("image1color.tiff", outfile);
+
     	String output = null;
     	g_objPassport = new Passport();
     	g_objPassportDetailsService = new PassportDetailsServiceImpl();
     	g_objImageToTextProcessor = new TesseractImageToTextProcessor();
     	
-//        String output = g_objImageToTextProcessor.processImageFromFile("/Users/adityasrivastava/Documents/TesseractProject/my-app", "output1.tiff", "eng");
-    	
-		try {
-			InputStream io = new FileInputStream("images/image1colorOut.tiff");
-			output = g_objImageToTextProcessor.processImageFromMemory(io,".", "eng");
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+    	output = g_objImageToTextProcessor.processImageFromFile(".", outfile, "eng");
+    
+    	// Buffer stream access
+//		try {
+//			InputStream io = new FileInputStream("/Users/adityasrivastava/Documents/TesseractProject/my-app/images/file1.tiff");
+//			output = g_objImageToTextProcessor.processImageFromMemory(io,"/Users/adityasrivastava/Documents/TesseractProject/my-app", "eng");
+//			
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
 		
         if (output != null) {
         	output = output.trim();

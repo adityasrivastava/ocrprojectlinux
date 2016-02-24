@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
@@ -121,7 +124,13 @@ public class TesseractImageToTextProcessor {
 	            	v_objTessBaseApi.End();
 	            }
 	            
-	         
+	            Path path = Paths.get(param_objDirectoryPath+"/images/"+param_objImageName);
+	            try {
+					Files.delete(path);
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 	        }
 			return v_objOutputText;
 	    }
