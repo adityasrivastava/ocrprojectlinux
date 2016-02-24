@@ -19,7 +19,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	@Override
 	public char extractPassportType(String param_objInputString) {
 		char v_objPassportType = 0;
-//		this.extractSeperator(param_objInputString);
+
 		Matcher match = Pattern.compile(PASSPORT_TYPE_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -36,13 +36,15 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	@Override
 	public String extractOrganization(String param_objInputString) {
 		String v_objOrganization = null;
-		this.extractSeperator(param_objInputString);
+
 		Matcher match = Pattern.compile(ORGANIZATION_REGEX)
 				.matcher(param_objInputString);
-		match.region(g_iCurrentPositionIndex, param_objInputString.length());
+		match.region(g_iCurrentPositionIndex+1, param_objInputString.length());
 
 		if (match.find()) {
 			v_objOrganization = match.group(0);
+			v_objOrganization = v_objOrganization.replaceAll("1", "I");
+			v_objOrganization = v_objOrganization.replaceAll("3", "D");
 			g_iCurrentPositionIndex = match.end();
 		}
 
@@ -53,7 +55,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	@Override
 	public String extractGivenName(String param_objInputString) {
 		String v_objGivenName = null;
-		this.extractSeperator(param_objInputString);
+		this.extractSeperator(param_objInputString, NAME_SEPERATOR_REGEX);
 		Matcher match = Pattern.compile(NAMES_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -71,7 +73,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	@Override
 	public String extractSurname(String param_objInputString) {
 		String v_objSurname = null;
-		this.extractSeperator(param_objInputString);
+		this.extractSeperator(param_objInputString, SEPERATOR_REGEX);
 		Matcher match = Pattern.compile(NAMES_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -89,7 +91,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	public String extractPassportNumber(String param_objInputString) {
 
 		String v_objPassportNumber = null;
-		this.extractSeperator(param_objInputString);
+
 		Matcher match = Pattern.compile(PASSPORT_NUMBER_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -107,8 +109,10 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	public String extractNationality(String param_objInputString) {
 
 		String v_objNationality = null;
-		this.extractSeperator(param_objInputString);
-		this.extractCheckDigit(param_objInputString);
+		
+		// Skip < & check digit
+		g_iCurrentPositionIndex = g_iCurrentPositionIndex + 2;
+		
 		Matcher match = Pattern.compile(NATIONALITY_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -127,7 +131,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	public String extractDateOfBirth(String param_objInputString) {
 
 		String v_objDOB = null;
-		this.extractSeperator(param_objInputString);
+		g_iCurrentPositionIndex++;System.out.println(g_iCurrentPositionIndex);
 		Matcher match = Pattern.compile(DATE_OF_BIRTH_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -145,8 +149,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	public String extractExpiryDate(String param_objInputString) {
 
 		String v_objExpiryDate = null;
-		this.extractSeperator(param_objInputString);
-//		this.extractCheckDigit(param_objInputString);
+		this.extractSeperator(param_objInputString, SEPERATOR_REGEX);
 		Matcher match = Pattern.compile(DATE_OF_EXPIRY_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -165,7 +168,7 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	public char extractGender(String param_objInputString) {
 
 		char v_objGender = 0;
-		this.extractSeperator(param_objInputString);
+		this.extractSeperator(param_objInputString, SEPERATOR_REGEX);
 		Matcher match = Pattern.compile(GENDER_REGEX)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
@@ -196,20 +199,43 @@ public class PassportDetailsServiceImpl implements PassportDetailsService {
 	}
 
 	@Override
-	public void extractSeperator(String param_objInputString) {
+	public boolean extractSeperator(String param_objInputString, String param_objSeperatorRegex) {
 
 		String v_objSerpator = null;
+		boolean v_bSeperatorBool = false;
 
-		Matcher match = Pattern.compile(SEPERATOR_REGEX)
+		Matcher match = Pattern.compile(param_objSeperatorRegex)
 				.matcher(param_objInputString);
 		match.region(g_iCurrentPositionIndex, param_objInputString.length());
 
 		if (match.find()) {
 			v_objSerpator = match.group(0);
 			g_iCurrentPositionIndex = match.end();
+			v_bSeperatorBool = true;
 		}
 
+		return v_bSeperatorBool;
 
+	}
+
+	@Override
+	public String extractMiddleName(String param_objInputString) {
+		String v_objMiddleName = null;
+
+		if(!extractSeperator(param_objInputString, SEPERATOR_REGEX)){
+			return v_objMiddleName;
+		}
+
+		Matcher match = Pattern.compile(NAMES_REGEX)
+				.matcher(param_objInputString);
+		match.region(g_iCurrentPositionIndex, param_objInputString.length());
+
+		if (match.find()) {
+			v_objMiddleName = match.group(0);
+			g_iCurrentPositionIndex = match.end();
+		}
+
+		return v_objMiddleName;
 	}
 
 }

@@ -8,11 +8,12 @@ public class Passport {
 	private String organization;
 	private String givenName;
 	private String surname;
+	private String middlename;
 	private String passportNumber;
 	private String nationality;
 	private String dateOfBirth;
 	private String expirationDate;
-//	private String personalNumber;
+
 	
 	public int getId() {
 		return id;
@@ -74,22 +75,22 @@ public class Passport {
 	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
 	}
-	
-//	public String getPersonalNumber() {
-//		return personalNumber;
-//	}
-//	public void setPersonalNumber(String personalNumber) {
-//		this.personalNumber = personalNumber;
-//	}
-	
+
+	public String getMiddlename() {
+		return middlename;
+	}
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
 	@Override
 	public String toString() {
-		return "Passport [id=" + id + ", typeOfPassport=" + typeOfPassport + ", organization=" + organization
-				+ ", givenName=" + givenName + ", surname=" + surname + ", passportNumber=" + passportNumber
-				+ ", nationality=" + nationality + ", dataOfBirth=" + dateOfBirth + ", gender=" + gender
+		return "Passport [id=" + id + ", typeOfPassport=" + typeOfPassport + ", gender=" + gender + ", organization="
+				+ organization + ", givenName=" + givenName + ", surname=" + surname + ", middlename=" + middlename
+				+ ", passportNumber=" + passportNumber + ", nationality=" + nationality + ", dateOfBirth=" + dateOfBirth
 				+ ", expirationDate=" + expirationDate + "]";
 	}
 	
+
 	
 
 }

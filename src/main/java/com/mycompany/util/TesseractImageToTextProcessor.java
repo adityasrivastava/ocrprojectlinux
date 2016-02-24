@@ -95,7 +95,7 @@ public class TesseractImageToTextProcessor {
 
 	        try {
 
-	        	v_objPixImage = lept.pixRead(param_objDirectoryPath+"/images/"+param_objImageName);
+	        	v_objPixImage = lept.pixRead(param_objDirectoryPath+"/"+param_objImageName);
 	   	        v_objTessBaseApi.SetImage(v_objPixImage);
 	   	        v_objBytePointer = v_objTessBaseApi.GetUTF8Text();
 	   	        v_objOutputText = v_objBytePointer.getString("UTF-8");
@@ -124,13 +124,13 @@ public class TesseractImageToTextProcessor {
 	            	v_objTessBaseApi.End();
 	            }
 	            
-	            Path path = Paths.get(param_objDirectoryPath+"/images/"+param_objImageName);
-	            try {
-					Files.delete(path);
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}
+//	            Path path = Paths.get(param_objDirectoryPath+"/images/"+param_objImageName);
+//	            try {
+//					Files.delete(path);
+//				} catch (IOException e) {
+//					
+//					e.printStackTrace();
+//				}
 	        }
 			return v_objOutputText;
 	    }
