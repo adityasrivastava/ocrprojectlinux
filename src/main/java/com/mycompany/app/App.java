@@ -35,21 +35,44 @@ public class App
 	
 	
 	   
-    public static void main( String[] args ) throws Exception
+    public static void main( String[] args ) 
     {
-    	String outfile = "images/image1colorOut.tiff";
-    	App app = new App(); 
 
+    	App app = new App();  
+    	
+    	app.cardTest();
+    	
+//    	try {
+//			app.passportTest();
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
+    }
+    
+    public void cardTest() {
+    	
+    	
+    	
+    }
+    
+    public void passportTest() throws Exception{
+    	String outfile = "images/image1colorOut.tiff";
+    
     	BufferedImage bi = ImageIO.read(new File("images/file3.tiff"));
+    	
+    	// Process Images to output file
 		ImageProcessingUtil.processImageStreamForDetailExtraction(bi, outfile);
 
     	String output = null;
     	g_objPassport = new Passport();
     	g_objImageToTextProcessor = new TesseractImageToTextProcessor();
    
+    	// Process Image from file
     	output = g_objImageToTextProcessor.processImageFromFile(".", outfile, "eng");
-    	PassportDetailsHandler v_objHandler = new PassportDetailsHandler();
     	
+    	// Extract details
+    	PassportDetailsHandler v_objHandler = new PassportDetailsHandler();
     	v_objHandler.processPassportDetails(output);
     
     	// Buffer stream access
@@ -63,6 +86,5 @@ public class App
 //			e.printStackTrace();
 //		}
 //		
-
     }
 }
