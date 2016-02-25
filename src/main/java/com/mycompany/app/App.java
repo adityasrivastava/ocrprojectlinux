@@ -48,9 +48,9 @@ public class App
     	g_objImageToTextProcessor = new TesseractImageToTextProcessor();
    
     	output = g_objImageToTextProcessor.processImageFromFile(".", outfile, "eng");
-    	PassportDetailsHandler v = new PassportDetailsHandler();
+    	PassportDetailsHandler v_objHandler = new PassportDetailsHandler();
     	
-    	v.processPassportDetails(output);
+    	v_objHandler.processPassportDetails(output);
     
     	// Buffer stream access
 //		try {
