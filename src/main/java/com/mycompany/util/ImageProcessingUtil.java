@@ -30,7 +30,7 @@ public class ImageProcessingUtil {
 		g_objConvertCmd.setSearchPath("/opt/ImageMagick/bin");
 		g_objImoOperations = new IMOperation();
     	g_objImoOperations.addImage(); 
-    	g_objImoOperations.resize(640,480);
+//    	g_objImoOperations.resize(640,480);
     	g_objImoOperations.addImage();
     	
     	try {

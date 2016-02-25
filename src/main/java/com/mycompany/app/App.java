@@ -42,12 +42,12 @@ public class App
     	
     	app.cardTest();
     	
-//    	try {
-//			app.passportTest();
-//		} catch (Exception e) {
-//			
-//			e.printStackTrace();
-//		}
+    	try {
+			app.passportTest();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
     }
     
     public void cardTest() {
@@ -59,7 +59,7 @@ public class App
     public void passportTest() throws Exception{
     	String outfile = "images/image1colorOut.tiff";
     
-    	BufferedImage bi = ImageIO.read(new File("images/file3.tiff"));
+    	BufferedImage bi = ImageIO.read(new File("images/image1color.tiff"));
     	
     	// Process Images to output file
 		ImageProcessingUtil.processImageStreamForDetailExtraction(bi, outfile);

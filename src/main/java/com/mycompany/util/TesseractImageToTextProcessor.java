@@ -85,7 +85,7 @@ public class TesseractImageToTextProcessor {
 	        String v_objOutputText = null;
 	        
 	        v_objTessBaseApi = new TessBaseAPI();
-//	       	v_objTessBaseApi.SetRectangle(arg0, arg1, arg2, arg3);
+
 	        
 	        if (v_objTessBaseApi.Init(param_objDirectoryPath+"/tessdata", param_objLanguageName) != 0) {
 	            throw new RuntimeException("Could not initialize tesseract.");
@@ -97,6 +97,8 @@ public class TesseractImageToTextProcessor {
 
 	        	v_objPixImage = lept.pixRead(param_objDirectoryPath+"/"+param_objImageName);
 	   	        v_objTessBaseApi.SetImage(v_objPixImage);
+	   	        v_objTessBaseApi.SetSourceResolution(600);
+//		       	v_objTessBaseApi.SetRectangle(arg0, arg1, arg2, arg3);
 	   	        v_objBytePointer = v_objTessBaseApi.GetUTF8Text();
 	   	        v_objOutputText = v_objBytePointer.getString("UTF-8");
 	   	        
