@@ -1,0 +1,13 @@
+
+convert outfile.jpg +dither -colors 2  -normalize ofile.jpg
+
+convert image1.jpg -density 400 -threshold 20% -gaussian-blur 2x10 output1.jpg
+
+
+https://www.youtube.com/watch?v=K1wyzuyOLdk.
+
+
+convert -density 400 -threshold 60% image3.jpg out.jpg
+
+http://stackoverflow.com/questions/21896484/imagemagick-white-threshold-and-monochrome-options-dont-work-together
+

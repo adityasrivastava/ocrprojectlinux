@@ -127,12 +127,12 @@ public class TesseractImageToTextProcessor {
 	            }
 	            
 	            Path path = Paths.get(param_objDirectoryPath+"/"+param_objImageName);
-	            try {
-					Files.delete(path);
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}
+//	            try {
+//					Files.delete(path);
+//				} catch (IOException e) {
+//					
+//					e.printStackTrace();
+//				}
 	        }
 			return v_objOutputText;
 	    }

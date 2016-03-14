@@ -17,7 +17,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
-import javax.media.jai.RenderedImageAdapter;
+//import javax.media.jai.RenderedImageAdapter;
+
+
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.lept;
@@ -37,17 +39,24 @@ import org.im4java.core.Stream2BufferedImage;
 
 import com.mycompany.handler.PassportDetailsHandler;
 import com.mycompany.model.Passport;
+import com.mycompany.service.CardDetailsService;
+import com.mycompany.service.CardDetailsServiceImpl;
 import com.mycompany.service.PassportDetailsService;
 import com.mycompany.service.PassportDetailsServiceImpl;
 import com.mycompany.util.ImageProcessingUtil;
 import com.mycompany.util.TesseractImageToTextProcessor;
-import com.sun.media.jai.codec.FileSeekableStream;
-import com.sun.media.jai.codec.TIFFDecodeParam;
+//import com.sun.media.jai.codec.FileSeekableStream;
+//import com.sun.media.jai.codec.TIFFDecodeParam;
 
 public class App 
 {
 	private static TesseractImageToTextProcessor g_objImageToTextProcessor;
 	private static Passport g_objPassport;   
+	String emailRegex = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+	String phoneRegex  = "\\(?[0-9]{3}\\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}";
+	String addressRegex = "[0-9]{1,6} [A-Za-z]+";
+	String addressRegex2 = "[A-Za-z]+, [A-Za-z]+ [0-9]{5}";
+	
 	
 	
 	   
@@ -56,7 +65,37 @@ public class App
 
     	App app = new App();  
     	
-    	app.cardTest();
+    	
+    	ConvertCmd cmd = new ConvertCmd();
+    	
+    	IMOperation operation = new IMOperation();
+    	
+    	operation.addImage("images/image1.jpg");
+    	operation.density(400);
+    	operation.colorspace("gray");
+    	operation.blackThreshold(20.0, true);
+    	operation.gaussianBlur(2.0, 10.0);
+    	operation.addImage();
+
+    	
+    	
+    	try {
+//        	cmd.run(operation,"images/testimage.jpg");
+    		cmd.run(operation, "images/image1colorOut.tiff");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IM4JavaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+//    	app.cardTest();
+    	
+    	app.passportTest();
     	
 //    	try {
 //			app.passportTest();
@@ -68,8 +107,8 @@ public class App
     
     public void cardTest() {
     	
-    	String param_objDirectoryPath = "/Users/adityasrivastava/Documents/TesseractProject/my-app/images/card";
-    	String param_objImageName = "imag3out.jpg";
+    	String param_objDirectoryPath = "/home/adi/TesseractTraining/tesseractProject/ocrprojectlinux/images";
+    	String param_objImageName = "testimage.jpg";
     	String param_objLanguageName = "eng";
     	
 		   	TessBaseAPI v_objTessBaseApi;
@@ -83,43 +122,14 @@ public class App
 	            throw new RuntimeException("Could not initialize tesseract.");
 	        }       
 	        
-	        v_objTessBaseApi.ReadConfigFile("."+"/tessdata/config/output.config");
+	        v_objTessBaseApi.ReadConfigFile("."+"/tessdata/config/letter.config");
 
 	        try {
 
 	        	v_objPixImage = lept.pixRead(param_objDirectoryPath+"/"+param_objImageName);
 	   	        v_objTessBaseApi.SetImage(v_objPixImage);
 	   	        v_objTessBaseApi.SetPageSegMode(6);
-	   	        
-	   	        int[] a = null;
-	   	        PIXA pixa = null;
-	   	        BOXA boxa = v_objTessBaseApi.GetComponentImages(2, true, pixa, a);
-	   	   
-//	   	        System.out.println(boxa.sizeof());
-	   	       
-	   	        for(int i = 0 ; i < boxa.sizeof(); i++){
-	   	        	BOX box = boxa.box(i);
-	   	        	v_objTessBaseApi.SetRectangle(box.x(), box.y(), box.h(), box.w());
-	   	        	
-	   	        	BytePointer bip = v_objTessBaseApi.GetUTF8Text();
-	   	        	
-	   	        	System.out.println(bip.getString("UTF-8"));
-	   	        	
-//	   	        	System.out.println(v_objTessBaseApi.MeanTextConf());
-	   	        	
-	   	        	
-	   	        }
-	   	        
-	   	        
-	   	        
-	   	        
-	   	        int byteP = v_objTessBaseApi.MeanTextConf();
-	   	       
-	   	       
-	   	       
-	   	       
-	   	      
-	   	       System.out.println(byteP);
+
 	   	        
 //	   	        v_objTessBaseApi.SetSourceResolution(600);
 //		       	v_objTessBaseApi.SetRectangle(arg0, arg1, arg2, arg3);
@@ -127,8 +137,21 @@ public class App
 	   	        v_objOutputText = v_objBytePointer.getString("UTF-8");
 	   	        
 	   	 
-	            System.out.println("HIIII"+v_objOutputText);;
+	            System.out.println(v_objOutputText);
 	            
+	            CardDetailsService cardService = new CardDetailsServiceImpl();
+//	            String output = cardService.extractPhone(v_objOutputText);
+//	            String output3 = cardService.extractAddress(v_objOutputText);
+//	            String output2 = cardService.extractEmail(v_objOutputText);
+//	            String output4 = cardService.extractName(v_objOutputText);
+	            String output5 = cardService.extractTitle(v_objOutputText);
+	            
+//	            System.out.println(output);
+//	            System.out.println(output2);
+//	            System.out.println(output3);
+//	            System.out.println(output4);
+	            
+	            System.out.println(output5);
 	        } catch (UnsupportedEncodingException e) {
 	        	
 	            throw new RuntimeException("charset", e);
